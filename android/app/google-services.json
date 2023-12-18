@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "158954104977",
+    "project_id": "liguapptest",
+    "storage_bucket": "liguapptest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158954104977:android:6faa9c884a01f9a2173730",
+        "android_client_info": {
+          "package_name": "com.lingualink.linguapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJa70kc-27ORrQUaM2PS-a0Tga7NeDgmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
