@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:linguapp/firebase_options.dart';
+import 'dart:developer' as developer show log;
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -58,11 +59,11 @@ class _RegisterViewState extends State<RegisterView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final userCredential = await FirebaseAuth.instance
+                  await FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: email, password: password); //登陆
                 } on FirebaseAuthException catch (e) {
-                  print(e.code);
+                  developer.log(e.code);
                 }
               },
               child: const Text('register')),
