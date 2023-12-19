@@ -11,7 +11,6 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends State<RegisterView> {
-
   late final TextEditingController _email;
   late final TextEditingController _password;
 
@@ -29,50 +28,53 @@ class _RegisterViewState extends State<RegisterView> {
     super.dispose();
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Register')
-        ),
+      appBar: AppBar(title: const Text('Register')),
       body: Column(
         children: [
-        TextField(
-          controller: _email,
-          enableSuggestions: false,
-          autocorrect: false,
-          keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-            hintText: 'Please enter your email'
-          ),
-  ),
           TextField(
-            controller: _password,
-            obscureText: true,
+            controller: _email,
             enableSuggestions: false,
             autocorrect: false,
-            decoration: const InputDecoration(
-              hintText: 'Please enter your password'
-            )
+            keyboardType: TextInputType.emailAddress,
+            decoration:
+                const InputDecoration(hintText: 'Please enter your email'),
           ),
-          TextButton(onPressed: () async {
-              await Firebase.initializeApp(
-                options: DefaultFirebaseOptions.currentPlatform,
-              );
+          TextField(
+              controller: _password,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration: const InputDecoration(
+                  hintText: 'Please enter your password')),
+          TextButton(
+              onPressed: () async {
+                await Firebase.initializeApp(
+                  options: DefaultFirebaseOptions.currentPlatform,
+                );
 
-              final email = _email.text;
-              final password = _password.text;
-              try {
-              final userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                email: email, 
-                password: password
-              );//登陆
-              } on FirebaseAuthException catch (e) {
-                print(e.code);
-              }
-          }, child: const Text('register')),
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  final userCredential = await FirebaseAuth.instance
+                      .createUserWithEmailAndPassword(
+                          email: email, password: password); //登陆
+                } on FirebaseAuthException catch (e) {
+                  print(e.code);
+                }
+              },
+              child: const Text('register')),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/login/', (route) => false);
+            },
+            child: const Text('go to Login'),
+          )
         ],
-      )
-      );
+      ),
+    );
   }
 }

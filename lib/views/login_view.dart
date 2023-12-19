@@ -11,7 +11,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-late final TextEditingController _email;
+  late final TextEditingController _email;
   late final TextEditingController _password;
 
   @override
@@ -28,58 +28,52 @@ late final TextEditingController _email;
     super.dispose();
   }
 
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Login')
-        ),
-      body: FutureBuilder(
-        future: Firebase.initializeApp(
-                  options: DefaultFirebaseOptions.currentPlatform,
-                ),
-        builder: (context, snapshot) { 
-          switch(snapshot.connectionState) {
-            case ConnectionState.done:
-              return Column(
-                      children: [
-                      TextField(
-                        controller: _email,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          hintText: 'Please enter your email'
-                        ),
-                      ),
-                        TextField(
-                          controller: _password,
-                          obscureText: true,
-                          enableSuggestions: false,
-                          autocorrect: false,
-                          decoration: const InputDecoration(
-                            hintText: 'Please enter your password'
-                          )
-                        ),
-                        TextButton(onPressed: () async {                              
-                            final email = _email.text;
-                            final password = _password.text;
-                            try {
-                              final loginResult = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                email: email, 
-                                password: password
-                              );//登陆
-                            } on FirebaseAuthException catch (e) {
-                              print(e.code);
-                            }
-                        }, child: const Text('Login')),
-                      ],
-                    );
-              default:
-              return const Text('Loading...');
-          }
-        },
+      appBar: AppBar(title: const Text('Login')),
+      body: Column(
+        children: [
+          TextField(
+            controller: _email,
+            enableSuggestions: false,
+            autocorrect: false,
+            keyboardType: TextInputType.emailAddress,
+            decoration:
+                const InputDecoration(hintText: 'Please enter your email'),
+          ),
+          TextField(
+              controller: _password,
+              obscureText: true,
+              enableSuggestions: false,
+              autocorrect: false,
+              decoration:
+                  const InputDecoration(hintText: 'Please enter your password')),
+          TextButton(
+              onPressed: () async {
+                final email = _email.text;
+                final password = _password.text;
+                try {
+                  final loginResult = await FirebaseAuth.instance
+                      .signInWithEmailAndPassword(
+                          email: email, password: password); //登陆
+                  print(loginResult);
+                } on FirebaseAuthException catch (e) {
+                  print(e.code);
+                }
+              },
+              child: const Text('Login')),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                '/register/', 
+                (route) => false
+              );
+            },
+            child: const Text('I want to register'),
+          )
+        ],
       ),
-      );
+    );
   }
 }
