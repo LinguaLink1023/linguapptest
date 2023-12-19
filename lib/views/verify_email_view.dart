@@ -18,7 +18,8 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
       appBar: AppBar(title: const Text('Email Verify')),
       body: Column(
         children: [
-          const Text('Please verify your email'),
+          const Text('已发送验证链接至您的邮箱，请先验证'),
+          const Text('如果没有收到，点击下面按钮重新发送'),
           TextButton(
             onPressed: () async {
               final user = FirebaseAuth.instance.currentUser;
@@ -26,14 +27,24 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               developer.log((user?.email).toString());
 
               await user?.sendEmailVerification();
-              
+
               Navigator.of(context).pushNamedAndRemoveUntil(
                 loginRoute,
                 (route) => false,
               );
             },
             child: const Text('Send email verification.'),
-          )
+          ),
+          TextButton(
+            onPressed: () async {
+              await FirebaseAuth.instance.signOut();
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
+            },
+            child: const Text('Restart'),
+          ),
         ],
       ),
     );

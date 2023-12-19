@@ -3,8 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:linguapp/constants/routes.dart';
 import 'package:linguapp/firebase_options.dart';
-import 'package:linguapp/constants/routes.dart';
 import 'dart:developer' as developer show log;
+
+import 'package:linguapp/utilities/show_error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -42,16 +43,19 @@ class _RegisterViewState extends State<RegisterView> {
             enableSuggestions: false,
             autocorrect: false,
             keyboardType: TextInputType.emailAddress,
-            decoration:
-                const InputDecoration(hintText: 'Please enter your email'),
+            decoration: const InputDecoration(
+              hintText: 'Please enter your email',
+            ),
           ),
           TextField(
-              controller: _password,
-              obscureText: true,
-              enableSuggestions: false,
-              autocorrect: false,
-              decoration: const InputDecoration(
-                  hintText: 'Please enter your password')),
+            controller: _password,
+            obscureText: true,
+            enableSuggestions: false,
+            autocorrect: false,
+            decoration: const InputDecoration(
+              hintText: 'Please enter your password',
+            ),
+          ),
           TextButton(
               onPressed: () async {
                 await Firebase.initializeApp(
@@ -61,18 +65,29 @@ class _RegisterViewState extends State<RegisterView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
-                          email: email, password: password); //登陆
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  ); //登陆
+                  final user = FirebaseAuth.instance.currentUser;
+                  await user?.sendEmailVerification();
+
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    verifyEmailRoute,
+                    (route) => false,
+                  );
                 } on FirebaseAuthException catch (e) {
-                  developer.log(e.code);
+                  //developer.log(e.code);
+                  await showErrorDialog(context, e.code);
                 }
               },
               child: const Text('register')),
           TextButton(
             onPressed: () {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil(loginRoute, (route) => false);
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                loginRoute,
+                (route) => false,
+              );
             },
             child: const Text('go to Login'),
           )
