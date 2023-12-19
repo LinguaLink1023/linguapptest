@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer' as developer show log;
 import 'package:linguapp/constants/routes.dart';
+import 'package:linguapp/utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -54,9 +55,11 @@ class _LoginViewState extends State<LoginView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final loginResult = await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: email, password: password); //登陆
+                  final loginResult =
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email,
+                    password: password,
+                  ); //登陆
                   developer.log(loginResult.toString());
 
                   final user = FirebaseAuth.instance.currentUser;
@@ -72,7 +75,8 @@ class _LoginViewState extends State<LoginView> {
                     );
                   }
                 } on FirebaseAuthException catch (e) {
-                  developer.log(e.code);
+                  // developer.log(e.code);
+                  await showErrorDialog(context, e.code);
                 }
               },
               child: const Text('Login')),
@@ -90,3 +94,5 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
+
+

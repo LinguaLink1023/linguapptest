@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:linguapp/constants/routes.dart';
 import 'package:linguapp/firebase_options.dart';
+import 'package:linguapp/utilities/show_logout_dialog.dart';
 import 'package:linguapp/views/login_view.dart';
 import 'package:linguapp/views/register_view.dart';
 import 'package:linguapp/views/verify_email_view.dart';
@@ -34,7 +35,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = FirebaseAuth.instance.currentUser;
     return FutureBuilder(
         future: Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform,
@@ -42,7 +42,7 @@ class HomePage extends StatelessWidget {
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.done:
-              // final user = FirebaseAuth.instance.currentUser;
+              final user = FirebaseAuth.instance.currentUser;
               developer.log(user.toString());
               if (user != null) {
                 if (user.emailVerified) {
@@ -109,27 +109,4 @@ class _NotesViewState extends State<NotesView> {
   }
 }
 
-Future<bool> showLogoutDialog(BuildContext context) {
-  return showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Sign out'),
-          content: const Text('Are you sure to sign out?'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: const Text('Log out'),
-            ),
-          ],
-        );
-      }).then((value) => value ?? false);
-}
+
