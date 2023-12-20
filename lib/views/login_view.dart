@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer' as developer show log;
 import 'package:linguapp/constants/routes.dart';
+import 'package:linguapp/services/auth/auth_exceptions.dart';
+import 'package:linguapp/services/auth/auth_service.dart';
 import 'package:linguapp/utilities/show_error_dialog.dart';
 
 class LoginView extends StatefulWidget {
@@ -55,15 +55,13 @@ class _LoginViewState extends State<LoginView> {
                 final email = _email.text;
                 final password = _password.text;
                 try {
-                  final loginResult =
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                  await AuthService.firebase().logIn(
                     email: email,
                     password: password,
-                  ); //登陆
-                  developer.log(loginResult.toString());
+                  );
 
-                  final user = FirebaseAuth.instance.currentUser;
-                  if (user?.emailVerified ?? false) {
+                  final user = AuthService.firebase().currentUser;
+                  if (user?.isEmailVerified ?? false) {
                     Navigator.of(context).pushNamedAndRemoveUntil(
                       notesRoute,
                       (route) => false,
@@ -74,9 +72,21 @@ class _LoginViewState extends State<LoginView> {
                       (route) => false,
                     );
                   }
-                } on FirebaseAuthException catch (e) {
-                  // developer.log(e.code);
-                  await showErrorDialog(context, e.code);
+                } on UserNotFoundAuthException {
+                  await showErrorDialog(
+                    context,
+                    'User not found',
+                  );
+                } on WrongPasswordAuthException {
+                  await showErrorDialog(
+                    context,
+                    'Wrong password',
+                  );
+                } on GenericAuthException {
+                  await showErrorDialog(
+                    context,
+                    'Authencation error',
+                  );
                 }
               },
               child: const Text('Login')),
@@ -94,5 +104,3 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
-
-

@@ -3,6 +3,8 @@ import 'package:linguapp/services/auth/auth_user.dart';
 abstract class AuthenProvider {
   AuthUser? get currentUser;
 
+  Future<void> initialize();
+
   Future<AuthUser> logIn({
     required String email,
     required String password,

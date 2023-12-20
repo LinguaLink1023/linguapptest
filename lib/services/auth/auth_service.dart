@@ -1,10 +1,15 @@
 import 'package:linguapp/services/auth/auth_provider.dart';
 import 'package:linguapp/services/auth/auth_user.dart';
+import 'package:linguapp/services/auth/firebase_auth_provider.dart';
 
 class AuthService implements AuthenProvider {
   final AuthenProvider provider;
 
   const AuthService(this.provider);
+
+  factory AuthService.firebase() => AuthService(
+        FirebaseAuthProvider(),
+      );
 
   @override
   Future<AuthUser> createUser({
@@ -34,4 +39,7 @@ class AuthService implements AuthenProvider {
 
   @override
   Future<void> sendEmailVerification() => provider.sendEmailVerification();
+  
+  @override
+  Future<void> initialize() => provider.initialize();
 }
