@@ -80,7 +80,7 @@ void main() {
             password: 'password',
           );
           expect(provider.currentUser, user);
-          expect(user.isEmailVerified, true);
+          expect(user.isEmailVerified, false);
         },
       );
 
@@ -155,7 +155,7 @@ class MockAuthProvider implements AuthenProvider {
     if (!isInitialized) throw NotInitializedException();
     if (email == 'lixiangban@qq.com') throw UserNotFoundAuthException();
     if (password == 'leyao') throw WrongPasswordAuthException();
-    const user = AuthUser(isEmailVerified: true);
+    const user = AuthUser(isEmailVerified: false);
     _user = user;
     return Future.value(user);
   }
