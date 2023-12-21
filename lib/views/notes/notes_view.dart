@@ -3,8 +3,10 @@ import 'package:linguapp/constants/routes.dart';
 import 'package:linguapp/enums/menu_action.dart';
 import 'package:linguapp/services/auth/auth_service.dart';
 import 'package:linguapp/services/crud/notes_service.dart';
-import 'package:linguapp/utilities/show_logout_dialog.dart';
+import 'package:linguapp/utilities/dialogs/logout_dialog.dart';
 import 'dart:developer' as developer show log;
+
+import 'package:linguapp/views/notes/notes_list_view.dart';
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -79,18 +81,10 @@ class _NotesViewState extends State<NotesView> {
                       if (snapshot.hasData) {
                         final allNotes = snapshot.data as List<DatabaseNote>;
                         print(allNotes);
-                        return ListView.builder(
-                          itemCount: allNotes.length,
-                          itemBuilder: (context, index) {
-                            final note = allNotes[index];
-                            return ListTile(
-                              title: Text(
-                                note.text,
-                                maxLines: 1,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            );
+                        return NotesListView(
+                          notes: allNotes,
+                          onDeleteNote: (note) async {
+                            await _notesService.deleteNote(id: note.id);
                           },
                         );
                       } else {
