@@ -156,6 +156,7 @@ class MockAuthProvider implements AuthenProvider {
     if (email == 'lixiangban@qq.com') throw UserNotFoundAuthException();
     if (password == 'leyao') throw WrongPasswordAuthException();
     const user = AuthUser(
+      id: 'my_id',
       isEmailVerified: false,
       email: 'lixiangban@qq.com',
     );
@@ -181,6 +182,7 @@ class MockAuthProvider implements AuthenProvider {
     final user = _user;
     if (user == null) throw UserNotFoundAuthException();
     const newUser = AuthUser(
+      id: 'my_id',
       isEmailVerified: true,
       email: 'lixiangban@qq.com',
     );
