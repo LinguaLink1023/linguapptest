@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:linguapp/constants/routes.dart';
 import 'package:linguapp/services/auth/auth_service.dart';
 import 'package:linguapp/views/login_view.dart';
-import 'package:linguapp/views/notes/new_note_view.dart';
+import 'package:linguapp/views/notes/create_update_note_view.dart';
 import 'package:linguapp/views/notes/notes_view.dart';
 import 'package:linguapp/views/register_view.dart';
 import 'package:linguapp/views/verify_email_view.dart';
@@ -24,7 +24,7 @@ void main() {
         registerRoute: (context) => const RegisterView(),
         notesRoute: (context) => const NotesView(),
         verifyEmailRoute: (context) => const VerifyEmailView(),
-        newNoteRoute: (context) => const NewNoteView(),
+        createOrUpdateNoteRoute: (context) => const CreateUpdateNoteView(),
       },
     ),
   );
