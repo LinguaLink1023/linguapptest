@@ -5,7 +5,6 @@ import 'package:linguapp/services/auth/bloc/auth_bloc.dart';
 import 'package:linguapp/services/auth/bloc/auth_event.dart';
 import 'package:linguapp/services/auth/bloc/auth_state.dart';
 import 'package:linguapp/utilities/dialogs/error_dialog.dart';
-import 'package:linguapp/utilities/dialogs/loading_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -48,24 +47,28 @@ class _LoginViewState extends State<LoginView> {
       },
       child: Scaffold(
         appBar: AppBar(title: const Text('Login')),
-        body: Column(
-          children: [
-            TextField(
-              controller: _email,
-              enableSuggestions: false,
-              autocorrect: false,
-              keyboardType: TextInputType.emailAddress,
-              decoration:
-                  const InputDecoration(hintText: 'Please enter your email'),
-            ),
-            TextField(
-                controller: _password,
-                obscureText: true,
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text(
+                  'Please log in to your account in order to interact with and create notes!'),
+              TextField(
+                controller: _email,
                 enableSuggestions: false,
                 autocorrect: false,
-                decoration: const InputDecoration(
-                    hintText: 'Please enter your password')),
-            TextButton(
+                keyboardType: TextInputType.emailAddress,
+                decoration:
+                    const InputDecoration(hintText: 'Please enter your email'),
+              ),
+              TextField(
+                  controller: _password,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
+                  decoration: const InputDecoration(
+                      hintText: 'Please enter your password')),
+              TextButton(
                 onPressed: () async {
                   final email = _email.text;
                   final password = _password.text;
@@ -76,21 +79,32 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       );
                 },
-                child: const Text('Login')),
-            TextButton(
-              onPressed: () async {
-                final email = _email.text;
-                final password = _password.text;
-                context.read<AuthBloc>().add(
-                       AuthEventRegister(
-                        email,
-                        password,
-                      ),
-                    );
-              },
-              child: const Text('I want to register'),
-            )
-          ],
+                child: const Text('Login'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final email = _email.text;
+                  final password = _password.text;
+                  context.read<AuthBloc>().add(
+                        AuthEventRegister(
+                          email,
+                          password,
+                        ),
+                      );
+                },
+                child: const Text('I want to register'),
+              ),
+              TextButton(
+                onPressed: () {
+                  final email = _email.text;
+                  context.read<AuthBloc>().add(
+                        AuthEventForgotPassword(email),
+                      );
+                },
+                child: const Text('I forgot my password'),
+              ),
+            ],
+          ),
         ),
       ),
     );

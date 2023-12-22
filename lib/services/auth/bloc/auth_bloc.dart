@@ -4,12 +4,61 @@ import 'package:linguapp/services/auth/bloc/auth_event.dart';
 import 'package:linguapp/services/auth/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(AuthenProvider provider) : super(const AuthStateUninitialized(isLoading: true)) {
+  AuthBloc(AuthenProvider provider)
+      : super(const AuthStateUninitialized(isLoading: true)) {
+      
+    on<AuthEventShouldRegister>((event, emit) {
+      emit(
+        const AuthStateRegistering(
+          exception: null,
+          isLoading: false,
+        ),
+      );
+    });
+    //forgot password
+    on<AuthEventForgotPassword>((event, emit) async {
+      emit(const AuthStateForgotPassword(
+        isLoading: false,
+        exception: null,
+        hasSentEmail: false,
+      ));
+  
+      final email = event.email;
+
+      if (email == null) {
+        return; //进入忘记密码页面
+      }
+      // 用户想要发送一个忘记密码的邮件
+      emit(const AuthStateForgotPassword(
+        isLoading: true,
+        exception: null,
+        hasSentEmail: false,
+      ));
+
+      bool didSendEmail;
+      Exception? exception;
+      try {
+        await provider.sendPasswordReset(toEmail: email);
+        didSendEmail = true;
+        exception = null;
+      } on Exception catch (e) {
+        didSendEmail = false;
+        exception = e;
+      }
+
+      emit(AuthStateForgotPassword(
+        isLoading: false,
+        exception: exception,
+        hasSentEmail: didSendEmail,
+      ));
+    });
+
     // send email verification
     on<AuthEventSendEmailVerification>((event, emit) async {
       await provider.sendEmailVerification();
       emit(state);
     });
+    //register
     on<AuthEventRegister>((event, emit) async {
       final email = event.email;
       final password = event.password;
