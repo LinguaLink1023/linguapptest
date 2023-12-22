@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-
-
-import 'package:linguapp/constants/routes.dart';
-import 'package:linguapp/services/auth/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:linguapp/services/auth/bloc/auth_bloc.dart';
+import 'package:linguapp/services/auth/bloc/auth_event.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
@@ -22,21 +21,17 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           const Text('如果没有收到，点击下面按钮重新发送'),
           TextButton(
             onPressed: () async {
-              await AuthService.firebase().sendEmailVerification();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                loginRoute,
-                (route) => false,
-              );
+              context.read<AuthBloc>().add(
+                    const AuthEventSendEmailVerification(),
+                  );
             },
             child: const Text('Send email verification.'),
           ),
           TextButton(
             onPressed: () async {
-              await AuthService.firebase().logOut();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                loginRoute,
-                (route) => false,
-              );
+              context.read<AuthBloc>().add(
+                    const AuthEventLogOut(),
+                  );
             },
             child: const Text('Restart'),
           ),
