@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linguapp/constants/routes.dart';
 import 'package:linguapp/enums/menu_action.dart';
 import 'package:linguapp/services/auth/auth_service.dart';
+import 'package:linguapp/services/auth/bloc/auth_bloc.dart';
+import 'package:linguapp/services/auth/bloc/auth_event.dart';
 import 'package:linguapp/services/cloud/cloud_note.dart';
 import 'package:linguapp/services/cloud/firebase_cloud_storage.dart';
 import 'package:linguapp/utilities/dialogs/logout_dialog.dart';
-import 'dart:developer' as developer show log;
+// import 'dart:developer' as developer show log;
 
 import 'package:linguapp/views/notes/notes_list_view.dart';
 
@@ -47,12 +50,9 @@ class _NotesViewState extends State<NotesView> {
                   final shouldLogout = await showLogoutDialog(context);
                   // developer.log(shouldLogout.toString());
                   if (shouldLogout) {
-                    await AuthService.firebase().logOut();
-                    //这个导航不会有返回箭头
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      loginRoute,
-                      (_) => false,
-                    );
+                    context.read<AuthBloc>().add(
+                          const AuthEventLogOut(),
+                        );
                   }
               }
             },
