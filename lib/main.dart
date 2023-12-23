@@ -21,8 +21,6 @@ void main() {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        colorScheme:
-            ColorScheme.fromSwatch().copyWith(secondary: Colors.blue), // 新版本
       ),
       home: BlocProvider<AuthBloc>(
         create: (context) => AuthBloc(FirebaseAuthProvider()),
